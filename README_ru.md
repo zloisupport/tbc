@@ -88,17 +88,17 @@ AUTHOR:
    SHA-5010
 
 COMMANDS:
-   ls       List files in a remote directory
-   mv       Move remote files or directories
-   cp       Copy remote files or directories
-   rm       Remove remote files or directories
-   mkdir    Make remote directory
-   find     Search for files in a remote directory
-   info     Show user information
-   put      Upload files to TeraBox
-   get      Download file from TeraBox
-   df       Display disk usage of TeraBox storage
-   help, h  Shows a list of commands or help for one command
+    ls       Вывести список файлов в удаленном каталоге
+    mv       Переместить удаленные файлы или каталоги
+    cp       Скопировать удаленные файлы или каталоги
+    rm       Удалить удаленные файлы или каталоги
+    mkdir    Создать удаленный каталог
+    find     Поиск файлов в удаленном каталоге
+    info     Показать информацию о пользователе
+    put      Загрузить файлы в TeraBox
+    get      Скачать файл из TeraBox
+    df       Показать использование дискового пространства TeraBox
+    help, h  Показать список команд или справку по конкретной команде
 
 GLOBAL OPTIONS:
    --cookie-file string, -c string  TeraBox cookie file
