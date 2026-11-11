@@ -1,0 +1,43 @@
+{
+  "FixedFileInfo": {
+    "FileVersion": {
+      "Major": 1,
+      "Minor": 0,
+      "Patch": 0,
+      "Build": 0
+    },
+    "ProductVersion": {
+      "Major": 1,
+      "Minor": 0,
+      "Patch": 0,
+      "Build": 0
+    },
+    "FileFlagsMask": "3f",
+    "FileFlags ": "00",
+    "FileOS": "040004",
+    "FileType": "01",
+    "FileSubType": "00"
+  },
+  "StringFileInfo": {
+    "Comments": "A simple and powerful command-line client for TeraBox",
+    "CompanyName": "sha5010",
+    "FileDescription": "tbc- simple and powerful command-line client for TeraBox",
+    "FileVersion": "0.1.0.0",
+    "InternalName": "tbc",
+    "LegalCopyright": "sha5010",
+    "LegalTrademarks": "sha5010",
+    "OriginalFilename": "tbc.exe",
+    "PrivateBuild": "",
+    "ProductName": "tbc",
+    "ProductVersion": "0.1.0.0",
+    "SpecialBuild": ""
+  },
+  "VarFileInfo": {
+    "Translation": {
+      "LangID": "0409",
+      "CharsetID": "04B0"
+    }
+  },
+  "IconPath": "build/windows/icon.ico",
+  "ManifestPath": "build/windows/tbc.exe.manifest"
+}
