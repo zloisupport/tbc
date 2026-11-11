@@ -13,6 +13,7 @@ import (
 const (
 	CliName           = "tbc"
 	CookieFileOptName = "cookie-file"
+	BaseUrlOptName    = "base-url"
 )
 
 var app = &cli.Command{
@@ -28,6 +29,11 @@ var app = &cli.Command{
 			Name:    CookieFileOptName,
 			Usage:   "TeraBox cookie file\n # if not specified, use TERABOX_COOKIE environment variable",
 			Aliases: []string{"c"},
+		},
+		&cli.StringFlag{
+			Name:    BaseUrlOptName,
+			Usage:   "TeraBox API base URL\n # if not specified, use TERABOX_BASE_URL environment variable (default: https://www.terabox.com)",
+			Aliases: []string{"u"},
 		},
 	},
 	Commands: []*cli.Command{
@@ -53,5 +59,5 @@ func setupClient(cmd *cli.Command) (*terabox.Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	return terabox.NewClient(cookie, nil)
+	return terabox.NewClientWithBaseURL(cookie, cmd.Root().String(BaseUrlOptName), nil)
 }

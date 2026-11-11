@@ -14,6 +14,8 @@ import (
 
 const (
 	cookieEnvName = "TERABOX_COOKIE"
+	// DefaultCookieFile is read when neither -c nor TERABOX_COOKIE is set.
+	DefaultCookieFile = "cookie"
 )
 
 func FindFilesRecursive(rootPath string) ([]string, error) {
@@ -52,18 +54,40 @@ func GetResponse(resp *resty.Response, err error) ([]byte, error) {
 }
 
 func getCookieFromEnv() (string, error) {
-	cookie := os.Getenv(cookieEnvName)
+	cookie := cleanCookie(os.Getenv(cookieEnvName))
 	if cookie == "" {
-		return "", fmt.Errorf("TeraBox Cookie not found")
+		return "", fmt.Errorf("TeraBox Cookie not found: set %s or pass -c <file>", cookieEnvName)
 	}
 	return cookie, nil
 }
 
+// cleanCookie removes whitespace and a UTF-8 BOM that editors such as
+// Notepad may add to a cookie file. Both would end up in the cookie name
+// and make the session unrecognizable to TeraBox.
+func cleanCookie(s string) string {
+	s = strings.TrimPrefix(s, "\uFEFF")
+	return strings.TrimSpace(s)
+}
+
 func GetCookie(filePath string) (string, error) {
-	if filePath == "" {
-		return getCookieFromEnv()
+	if filePath != "" {
+		return readCookieFile(filePath)
 	}
 
+	// Prefer the environment, then fall back to the conventional ./cookie
+	// file that this project's README suggests.
+	if cookie, err := getCookieFromEnv(); err == nil {
+		return cookie, nil
+	}
+	if _, err := os.Stat(DefaultCookieFile); err == nil {
+		return readCookieFile(DefaultCookieFile)
+	}
+
+	return "", fmt.Errorf("TeraBox Cookie not found: set %s, pass -c <file>, or create ./%s",
+		cookieEnvName, DefaultCookieFile)
+}
+
+func readCookieFile(filePath string) (string, error) {
 	fp, err := os.Open(filePath)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, filePath, "not found")
@@ -71,13 +95,18 @@ func GetCookie(filePath string) (string, error) {
 	}
 	defer fp.Close()
 
-	bytes, err := io.ReadAll(fp)
+	data, err := io.ReadAll(fp)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Failed to read cookie file")
 		return getCookieFromEnv()
 	}
 
-	cookie := string(bytes)
+	// A trailing newline, surrounding spaces or a UTF-8 BOM make the ndus
+	// value invalid, so strip all of them.
+	cookie := cleanCookie(string(data))
+	if cookie == "" {
+		return "", fmt.Errorf("cookie file %s is empty", filePath)
+	}
 	return cookie, nil
 }
 

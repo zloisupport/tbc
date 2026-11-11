@@ -155,7 +155,11 @@ func (c *Client) uploadChunk(ctx context.Context, pb *mpb.Progress, uploadInfo *
 	}
 	defer file.Close()
 
-	uploadEndpoint := strings.ReplaceAll(baseUrl, "www", "c-jp") + "/rest/2.0/pcs/superfile2"
+	uploadEndpoint := strings.Replace(c.baseURL, "://www.", "://c-jp.", 1)
+	if !strings.Contains(uploadEndpoint, "://c-jp.") {
+		uploadEndpoint = "https://c-jp.terabox.com"
+	}
+	uploadEndpoint += "/rest/2.0/pcs/superfile2"
 	fileName := filepath.Base(uploadInfo.LocalFilePath)
 
 	// prepare pipe
@@ -237,7 +241,7 @@ func (c *Client) uploadChunk(ctx context.Context, pb *mpb.Progress, uploadInfo *
 
 	req.Header.Set("Content-Type", multipartWriter.FormDataContentType())
 	req.Header.Set("User-Agent", userAgent)
-	req.Header.Set("Referer", baseUrl)
+	req.Header.Set("Referer", c.baseURL)
 	for _, cookie := range c.cookies {
 		req.AddCookie(cookie)
 	}

@@ -326,7 +326,7 @@ func (c *Client) Download(ctx context.Context, downloadFiles []DownloadFile, rec
 				}
 				req.Header.Set("Range", fmt.Sprintf("bytes=%d-%d", start, end))
 				req.Header.Set("User-Agent", userAgent)
-				req.Header.Set("Referer", baseUrl)
+				req.Header.Set("Referer", c.baseURL)
 				req.Close = true // Ensure connection is closed
 				for _, cookie := range c.cookies {
 					req.AddCookie(cookie)

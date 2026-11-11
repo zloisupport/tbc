@@ -2,6 +2,7 @@ package terabox
 
 import (
 	"bytes"
+	"errors"
 	"io"
 	"net/http"
 	"testing"
@@ -33,12 +34,59 @@ func TestNewClient(t *testing.T) {
 			},
 		},
 	}
-	client, err := NewClient("test_cookie", mockClient)
+	client, err := NewClient("ndus=test_cookie", mockClient)
 	if err != nil {
 		t.Fatalf("NewClient failed: %v", err)
 	}
 	if client == nil {
 		t.Fatal("Client is nil")
+	}
+}
+
+func TestCookieDomain(t *testing.T) {
+	cases := map[string]string{
+		"www.terabox.com": "terabox.com",
+		"dm.terabox.com":  "terabox.com",
+		"dm.nephobox.com": "nephobox.com",
+		"terabox.com":     "terabox.com",
+		"localhost":       "localhost",
+		"127.0.0.1":       "127.0.0.1",
+	}
+	for host, want := range cases {
+		if got := cookieDomain(host); got != want {
+			t.Errorf("cookieDomain(%q) = %q, want %q", host, got, want)
+		}
+	}
+}
+
+func TestNewClientInvalidBaseURL(t *testing.T) {
+	if _, err := NewClientWithBaseURL("ndus=test", "://bad", nil); err == nil {
+		t.Fatal("expected an error for an invalid base URL")
+	}
+}
+
+func TestNewClientExpiredCookie(t *testing.T) {
+	mockClient := &http.Client{
+		Transport: &MockRoundTripper{
+			RoundTripFunc: func(req *http.Request) *http.Response {
+				if req.URL.Path == "/main" {
+					// Logged-out page: bdstoken is present but empty.
+					return &http.Response{
+						StatusCode: 200,
+						Body: io.NopCloser(bytes.NewBufferString(
+							`var templateData = {"bdstoken":"","pcftoken":"x"};`,
+						)),
+						Header: make(http.Header),
+					}
+				}
+				return &http.Response{StatusCode: 404, Body: io.NopCloser(bytes.NewBufferString(""))}
+			},
+		},
+	}
+
+	_, err := NewClient("ndus=expired", mockClient)
+	if !errors.Is(err, ErrCookieExpired) {
+		t.Fatalf("expected ErrCookieExpired, got: %v", err)
 	}
 }
 
@@ -72,7 +120,7 @@ func TestGetHomeInfo(t *testing.T) {
 		},
 	}
 
-	client, err := NewClient("test_cookie", mockClient)
+	client, err := NewClient("ndus=test_cookie", mockClient)
 	if err != nil {
 		t.Fatalf("NewClient failed: %v", err)
 	}

@@ -34,9 +34,13 @@ go build -o tbc.exe ./cmd/tbc
 
 You need a TeraBox cookie (`ndus`). Get it via browser developer tools and set it in the `TERABOX_COOKIE` environment variable, or save it to a file and use the `-c` option.
 
+The most reliable way is to copy the **whole `Cookie` request header** from `DevTools → Network` (any `/api/...` request), because some accounts also need `ndut_fmt`, `csrfToken` and `TSID` cookies in addition to `ndus`.
+
+If your account uses another TeraBox frontend, point the client at its API host with `--base-url` (or `TERABOX_BASE_URL`), e.g. `--base-url https://dm.terabox.com`.
+
 ```bash
 # Set via environment variable (PowerShell)
-$env:TERABOX_COOKIE = "ndus=YOUR_COOKIE_VALUE; ..."
+$env:TERABOX_COOKIE = "ndus=YOUR_COOKIE_VALUE"
 
 # Or load from file
 ./tbc.exe -c cookie.txt ls
@@ -71,6 +75,8 @@ COMMANDS:
 GLOBAL OPTIONS:
    --cookie-file string, -c string  TeraBox cookie file
        # if not specified, use TERABOX_COOKIE environment variable
+   --base-url string, -u string     TeraBox API base URL
+       # if not specified, use TERABOX_BASE_URL environment variable
    --help, -h  show help
 ```
 
