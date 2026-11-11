@@ -2,6 +2,8 @@
 
 ![tbc_logo](https://repository-images.githubusercontent.com/963345828/78ea40a2-977c-4de4-b24d-74d9f3cef4c6)
 
+**English** · [Русский](README_ru.md) · [日本語](README_ja.md)
+
 A simple and powerful command-line client for TeraBox, written in Go.
 It supports `ls`-like file listing, memory-efficient split upload/download, and an interactive mode (REPL).
 
@@ -40,7 +42,7 @@ If your account uses another TeraBox frontend, point the client at its API host 
 
 ```bash
 # Set via environment variable (PowerShell)
-$env:TERABOX_COOKIE = "ndus=YOUR_COOKIE_VALUE"
+$env:TERABOX_COOKIE = "ndus=Yb1zciYteHuiRbjO_aw3cCbi540KkqudGmMc5gd3"
 
 # Or load from file
 ./tbc.exe -c cookie.txt ls

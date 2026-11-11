@@ -2,6 +2,8 @@
 
 ![tbc_logo](https://repository-images.githubusercontent.com/963345828/78ea40a2-977c-4de4-b24d-74d9f3cef4c6)
 
+[English](README.md) · [Русский](README_ru.md) · **日本語**
+
 Go言語で実装された、シンプルで強力なTeraBoxコマンドラインクライアントです。
 `ls` コマンドのようなファイル一覧表示、メモリ効率の良い分割アップロード・ダウンロード、そしてインタラクティブモード（REPL）をサポートしています。
 
