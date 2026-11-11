@@ -283,6 +283,12 @@ func (c *Client) Download(ctx context.Context, downloadFiles []DownloadFile, rec
 		}
 		chunkSize := int64(math.Ceil(float64(fileSize) / float64(numChunks)))
 
+		// An empty file has nothing to copy, so its bar would never advance
+		// and p.Wait() would block forever.
+		if fileSize == 0 && totalBar != nil {
+			totalBar.SetTotal(0, true)
+		}
+
 		sem := make(chan struct{}, downloadConcurrency)
 		g, ctx := errgroup.WithContext(ctx)
 

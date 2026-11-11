@@ -37,6 +37,9 @@ type Client struct {
 	jsToken  string
 	bdsToken string
 	baseURL  string
+	host     string
+	domain   string
+	region   string
 	cwd      string
 }
 
@@ -124,6 +127,8 @@ func NewClientWithBaseURL(cookieStr, baseURL string, httpClient *http.Client) (*
 		client:  restyClient,
 		cookies: cookieSlice,
 		baseURL: base,
+		host:    u.Hostname(),
+		domain:  cookieDomain(u.Hostname()),
 		cwd:     "/",
 	}
 
@@ -170,6 +175,11 @@ func (c *Client) getToken() (jsToken, bdsToken string, err error) {
 		return
 	}
 	bdsToken = matchBdsToken[1]
+
+	reRegionPrefix := regexp.MustCompile(`"regionDomainPrefix":"([^"]*)"`)
+	if match := reRegionPrefix.FindStringSubmatch(bodyStr); len(match) > 1 {
+		c.region = match[1]
+	}
 
 	reJsToken := regexp.MustCompile(`window\.jsToken%20%3D%20a%7D%3Bfn%28%22([^%]+)`)
 	matchJsToken := reJsToken.FindSubmatch(body)

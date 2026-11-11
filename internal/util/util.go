@@ -16,7 +16,17 @@ const (
 	cookieEnvName = "TERABOX_COOKIE"
 	// DefaultCookieFile is read when neither -c nor TERABOX_COOKIE is set.
 	DefaultCookieFile = "cookie"
+	// DebugEnvName enables verbose request/response logging when non-empty.
+	DebugEnvName = "TBC_DEBUG"
 )
+
+// Debugf prints a diagnostic message to stderr when TBC_DEBUG is set.
+func Debugf(format string, args ...any) {
+	if os.Getenv(DebugEnvName) == "" {
+		return
+	}
+	fmt.Fprintf(os.Stderr, "[debug] "+format+"\n", args...)
+}
 
 func FindFilesRecursive(rootPath string) ([]string, error) {
 	var fileList []string

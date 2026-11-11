@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"tbc/internal/runner"
 	"tbc/internal/terabox"
-	"tbc/internal/util"
 
 	"github.com/urfave/cli/v3"
 )
@@ -40,12 +39,9 @@ var putCmd = &cli.Command{
 		&cli.StringFlag{
 			Name:    "chunk-size",
 			Aliases: []string{"n"},
-			Usage:   "Split size (1k = 1024, 1M = 1048576)",
+			Usage:   "Deprecated: the upload slice size is chosen automatically by the server",
 			Value:   "50M",
-			Validator: func(arg string) error {
-				_, err := util.ParseChunkSize(arg)
-				return err
-			},
+			Hidden:  true,
 		},
 	},
 	UseShortOptionHandling: true,
@@ -63,11 +59,8 @@ func putAction(ctx context.Context, cmd *cli.Command) error {
 		return err
 	}
 
-	chunkSize, _ := util.ParseChunkSize(cmd.String("chunk-size"))
 	opts := terabox.UploadOptions{
-		UploadChunkSize: chunkSize,
-		SplitThreshold:  chunkSize * 2,
-		MaxConcurrency:  cmd.Int("split"),
+		MaxConcurrency: cmd.Int("split"),
 	}
 
 	return runner.Upload(ctx, client, cmd.Args().Slice(), cmd.String("destination"), &opts)
