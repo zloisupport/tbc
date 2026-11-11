@@ -42,7 +42,7 @@ If your account uses another TeraBox frontend, point the client at its API host 
 
 ```bash
 # Set via environment variable (PowerShell)
-$env:TERABOX_COOKIE = "ndus=Yb1zciYteHuiRbjO_aw3cCbi540KkqudGmMc5gd3"
+$env:TERABOX_COOKIE = "ndus=YOUR_COOKIE_VALUE"
 
 # Or load from file
 ./tbc.exe -c cookie.txt ls
