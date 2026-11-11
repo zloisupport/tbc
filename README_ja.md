@@ -44,6 +44,32 @@ $env:TERABOX_COOKIE = "ndus=YOUR_COOKIE_VALUE; ..."
 ./tbc.exe -c cookie.txt ls
 ```
 
+### 🌐 APIホスト（`--base-url`）
+
+アカウントによっては別のTeraBoxフロントエンドで提供されており、そこで発行されたCookieは `www.terabox.com` では受け付けられません。その場合はブラウザのアドレスバーに表示されているホストを指定してください。`--base-url`（エイリアス `-u`）はグローバルオプションで、すべてのコマンドに適用されます。
+
+```powershell
+# 完全なURL
+.\tbc.exe --base-url https://dm.terabox.com ls
+
+# 短いエイリアス。https:// は自動で補完されます
+.\tbc.exe -u dm.terabox.com ls
+
+# コマンド名の後ろでも指定できます
+.\tbc.exe ls -u dm.terabox.com
+
+# Cookieファイルと組み合わせる
+.\tbc.exe -c cookie -u https://dm.terabox.com get video.mp4
+```
+
+インタラクティブモードでは次のように入力します。
+
+```text
+tbc> -u https://dm.terabox.com ls
+```
+
+値の優先順位: `--base-url`/`-u` → 環境変数 `TERABOX_BASE_URL`（`.env` に記述可） → `https://www.terabox.com`。
+
 ### 💻 コマンド一覧
 
 ```text

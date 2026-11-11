@@ -48,6 +48,32 @@ $env:TERABOX_COOKIE = "ndus=YOUR_COOKIE_VALUE"
 ./tbc.exe -c cookie.txt ls
 ```
 
+### 🌐 API host (`--base-url`)
+
+Some accounts are served by a different TeraBox frontend, and `www.terabox.com` rejects the cookie issued there. In that case, point the client at the host from your browser's address bar. `--base-url` (alias `-u`) is a global option and applies to every command.
+
+```powershell
+# Full URL
+.\tbc.exe --base-url https://dm.terabox.com ls
+
+# Short alias; the https:// scheme is added automatically
+.\tbc.exe -u dm.terabox.com ls
+
+# Can also be placed after the command name
+.\tbc.exe ls -u dm.terabox.com
+
+# Combined with a cookie file
+.\tbc.exe -c cookie -u https://dm.terabox.com get video.mp4
+```
+
+Inside interactive mode:
+
+```text
+tbc> -u https://dm.terabox.com ls
+```
+
+The value is resolved in this order: `--base-url`/`-u` → `TERABOX_BASE_URL` environment variable (can be set in `.env`) → `https://www.terabox.com`.
+
 ### 💻 Commands
 
 ```text

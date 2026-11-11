@@ -48,6 +48,32 @@ $env:TERABOX_COOKIE = "ndus=ВАШ_COOKIE"
 ./tbc.exe -c cookie.txt ls
 ```
 
+### 🌐 API-хост (`--base-url`)
+
+Некоторые аккаунты обслуживаются другим фронтендом TeraBox, и `www.terabox.com` не принимает выданные им cookie. В этом случае укажите хост из адресной строки браузера. `--base-url` (алиас `-u`) — глобальный флаг, он действует для всех команд.
+
+```powershell
+# Полный адрес
+.\tbc.exe --base-url https://dm.terabox.com ls
+
+# Короткий алиас; схема https:// добавляется автоматически
+.\tbc.exe -u dm.terabox.com ls
+
+# Можно указывать и после имени команды
+.\tbc.exe ls -u dm.terabox.com
+
+# Вместе с файлом cookie
+.\tbc.exe -c cookie -u https://dm.terabox.com get video.mp4
+```
+
+В интерактивном режиме:
+
+```text
+tbc> -u https://dm.terabox.com ls
+```
+
+Приоритет значений: `--base-url`/`-u` → переменная `TERABOX_BASE_URL` (можно задать в `.env`) → `https://www.terabox.com`.
+
 ### 💻 Команды
 
 ```text
